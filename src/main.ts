@@ -1,10 +1,27 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router'; // Importa tu configuración de router
+import { createRouter, createWebHistory } from 'vue-router'; // Asegúrate de importar createRouter y createWebHistory
+import Login from './components/login.vue';
+import Empleados from './components/empleados.vue';
+import 'jquery';
+import 'datatables.net';
 
-const app = createApp(App);
-app.use(router); // Usa el router
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/',
+      name: 'Login',
+      component: Login,
+    },
+    {
+        path: '/empleados',
+        name: 'EmpleadosL',
+        component: Empleados
+    }
+  ],
+});
+
+const app = createApp(Empleados).use(router);
 
 app.mount('#app');
-
-

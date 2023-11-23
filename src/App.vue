@@ -3,10 +3,13 @@
     <!--Dividir en dos colunas-->
     <div id="coluna1" class="row">
       <div id="logo">
-        <img src="../src/assets/bg.jpg" alt="logo" width="800" />
+        <img id="bg" src="../src/assets/login.png" alt="logo" width="800" />
       </div>
       <div id="texto">
-        <p id="texto2">Dale más power a tus empleados hoy</p>
+        <div class="izq">
+          <img id="logoimg" src="../src/assets/logo_white.svg" alt="logo" width="50" />
+        </div>
+        <p id="texto2">Dale más power &#9889; a tus <br>empleados hoy &#x1F4AA;</p>
         <p id="texto3">Te ayudamos a gestionarlos de manera más sencilla</p>
       </div>
     </div>
@@ -26,9 +29,12 @@
           </div>
         </div>
         <div id="boxBoton">
-          <button id="boton" type="submit">Iniciar sesión</button>
-         
-          <!-- <button @click="goToEmpleados">Ir a Empleados</button> -->
+          <!--is loading design-->
+          <button v-if="isloading" disabled class="boton">
+            <i class="fa fa-spinner fa-spin"></i>
+            Iniciando sesión...
+          </button>
+          <button  v-else class="boton" type="submit">Iniciar Sesión</button>
         </div>
         <div id="footer">
           <p id="foot">¿Eres nuevo aquí? <a id="creacta" href="https://www.culqi.com/" target="_blank">Crea una cuenta</a></p>
@@ -41,21 +47,40 @@
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router'; 
 import '@fortawesome/fontawesome-free/css/all.css';
+import Login from './components/login.vue';
+import Empleados from './components/empleados.vue';
+import { createRouter, createWebHistory } from 'vue-router';
 
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+  {
+      path: '/',
+      name: 'Login',
+      component: Login,
+    },
+    {
+        path: '/empleados',
+        name: 'EmpleadosL',
+        component: Empleados
+    }
+  ],
+});
 
 import axios from 'axios';
 export default defineComponent({
-  name: 'App',
+  name: 'LoginPage',
+  router,
   data() {
     return {
       username: 'c.quispe@culqi.com',
       password: '',
       errorMessage: '',
+      isloading: false,
     };
   },
   setup() {
     const router = useRouter();
-
     const goToEmpleados = () => {
       router.push('/empleados');
     };
@@ -65,35 +90,49 @@ export default defineComponent({
     };
   },
   methods: {
-      async login() {
-    
+    async login() {
+      this.isloading = true;
+      
       try {
-        
         const response = await axios.post('https://fepruebatecnicaculqi-backend-production.up.railway.app/auth/login', {
           correo: this.username,//c.quispe@culqi.com
           password: this.password,//admin123
         });
-
-        
         if (response.data.status === 'error') {
-          this.errorMessage = response.data.message; // Establece el mensaje de error
+          this.errorMessage = response.data.message;
         } else {
           localStorage.setItem('token', response.data.data.token);
           this.$router.push('/empleados'); 
         }
       } catch (error) {
-        // Manejo de errores en caso de problemas con la solicitud HTTP
         this.errorMessage = 'Correo o contraseña incorrectos';
         console.error('Error al iniciar sesión:', error);
+      } finally {
+        this.isloading = false; 
       }
+      
     },
   },
 });
 </script>
 
-
 <style scoped>
 /* Estilos CSS específicos del componente Login */
+.izq{
+  margin-left: 60px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 10px;
+}
+#logoimg {
+  margin-top: 25px;
+  width: 100px;
+  flex-direction: column;
+  align-items: start;
+  gap: 32px;
+}
 #error {
   color: red;
   margin-bottom: 10px;
@@ -105,7 +144,6 @@ export default defineComponent({
 }
 #texto{
   /**todo el ancho */
-  
   width: 100%;
   color: #fff;
   background-color: #111827;
@@ -138,7 +176,8 @@ export default defineComponent({
   align-items: flex-end;
   gap: 32px;
 }
-#boton{
+.boton{
+  width: 100%;
   display: flex;
   height: 56px;
   padding: 21px 24px;
@@ -162,12 +201,12 @@ export default defineComponent({
 
   flex: 1;
   display: flex;
-  height: 1024px;
+  height: 100%;
   flex-direction: column; /* Alinea elementos en columna en lugar de fila */
   align-items: center; /* Centra verticalmente los elementos en esta columna */
 }
 
-#coluna1 img {
+#bg {
   /* Estilos para la imagen en la primera columna */
   max-width: 100%; /* Ajusta el ancho máximo de la imagen si es necesario */
   height: 700px; /* Ajusta la altura de la imagen automáticamente */
