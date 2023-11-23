@@ -6,8 +6,8 @@
         <img src="../assets/logo_black.svg" alt="Logo" />
       </div>
       <ul class="menu">
-        <li>Menú 1</li>
-        <li>Menú 2</li>
+        <li class="active"><i class="fa fa-users"></i>  Empleados</li>
+        <li><i class="fa fa-briefcase"></i> Reclutamiento</li>
       </ul>
       <button class="logout-button">Salir</button>
     </nav>
@@ -23,27 +23,49 @@
       <div class="content">
         <div class="card">
           <h2>Empleados</h2>
-          <table id="empleados-table" class="display">
+          <p>Gestiona tus empleados</p>
+          <div v-if="isLoading" class="skeleton-loading">
+            <!-- Aquí puedes agregar elementos de Skeleton -->
+            <div class="skeleton-row"></div>
+            <div class="skeleton-row"></div>
+            <div class="skeleton-row"></div>
+            <!-- ... Agrega más filas según sea necesario ... -->
+          </div>
+          <table v-else id="empleados-table" class="display">
             <thead>
               <tr>
-                <th>ID</th>
+                <!--<th>ID</th>-->
                 <th>Nombre</th>
-                <th>Correo Electrónico</th>
-                <th>Cargo</th>
+                <th>Nombre cargo</th>
                 <th>Departamento</th>
                 <th>Oficina</th>
-                <th>Estado de Cuenta</th>
+                <th>Cuenta</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="empleado in empleados" :key="empleado.id">
-                <td>{{ empleado.id }}</td>
+                <!--<td>{{ empleado.id }}</td>-->
                 <td>{{ empleado.nombre }}</td>
-                <td>{{ empleado.correo }}</td>
+                <!--<td>{{ empleado.correo }}</td>-->
                 <td>{{ empleado.cargo }}</td>
                 <td>{{ empleado.departamento }}</td>
                 <td>{{ empleado.oficina }}</td>
                 <td>{{ empleado.estadoCuenta }}</td>
+                <td>
+                  <!--buton view-->
+                  <button class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#viewModal">
+                    <i class="fa fa-eye"></i>
+                  </button>
+                  <!--edit buton-->
+                  <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#viewModal">
+                    <i class="fa fa-pen"></i>
+                  </button>
+                  <!--edit buton-->
+                  <button class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#viewModal">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -53,25 +75,28 @@
     </div>
   </div>
 </template>
-<!-- Agrega las hojas de estilo y scripts de DataTables y jQuery -->
+
   <script lang="ts">
   /* global $ */
   import {defineComponent} from 'vue';
   import $ from 'jquery';
   import 'datatables.net';
   import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+  import '@fortawesome/fontawesome-free/css/all.css';
+  import 'bootstrap/dist/css/bootstrap.css'; 
+  import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
     export default defineComponent({
         name: 'EmpleadosL',
         data() {
         return {
+          isLoading : false,
           empleados: [] as any[], 
         }
       },
       mounted() {
-        // Obtén el token de localStorage
-        const token = localStorage.getItem('token'); // Reemplaza 'mi_token' con la clave real de tu token
-
+        this.isLoading = true;
+        const token = localStorage.getItem('token');
         if (!token) {
           console.error('No se encontró el token en localStorage');
           return;
@@ -80,12 +105,13 @@
         const headers = new Headers();
         headers.append('Authorization', `Bearer ${token}`);
         fetch('https://fepruebatecnicaculqi-backend-production.up.railway.app/empleados?limit=10&page=4', {
-          method: 'GET', // Puedes ajustar el método según tu API
+          method: 'GET', 
           headers: headers,
         })
           .then((response) => response.json())
           .then((data) => {
-            this.empleados = data.data; 
+            this.empleados = data.data;
+            this.isLoading = false; 
             this.$nextTick(() => {
               $('#empleados-table').DataTable();
             });
@@ -98,7 +124,24 @@
 
   </script>
   <style scoped>
+  .skeleton-loading {
+    height: 700px;  
+    background-color: #f3f3f3;
+    padding: 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+
+.skeleton-row {
+  height: 20px;
+  width: 100%;
+  margin-bottom: 10px;
+  background-color: #e0e0e0;
+}
   /* Estilos para el círculo naranja */
+  .active{
+    color: #00A19B !important;
+  }
   .user-name{
     color: #333;
   }
@@ -121,7 +164,7 @@
 
   #maincontent{
    width: 100%; 
-   font-family: 'Roboto', sans-serif;
+   font-family: 'system-ui';
   }
   /* Estilos generales */
   .app-container {
@@ -151,15 +194,24 @@
   }
   
   .menu {
+    height: 100%;
     list-style: none;
     padding: 0;
   }
   
   .menu li {
+    padding: 25px;
+    font-family: 'system-ui';
+    color: #333;
     margin-bottom: 10px;
+  }
+  /**hover */
+  .menu li:hover{
+    color: #00A19B !important;
   }
   
   .logout-button {
+    width: 100%;
     background-color: #fff; /* Fondo blanco */
     color: #333; /* Texto gris */
     border: 2px solid #333; /* Borde gris */
@@ -170,21 +222,21 @@
   
   /* Estilos del encabezado */
   .app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    height: 50px;;
-    width: 100%;
-    border-right: 1px solid var(--greyscale-300, #E9EAEC);
-    background: var(--others-white, #FFF);
-    border-bottom: 1px solid var(--greyscale-300, #E9EAEC);
-    background: var(--others-white, #FFF);
-  }
+  display: flex;
+  align-items: end;
+  height: 50px;
+  width: 100%;
+  border-right: 1px solid var(--greyscale-300, #E9EAEC);
+  background: var(--others-white, #FFF);
+  border-bottom: 1px solid var(--greyscale-300, #E9EAEC);
+  background: var(--others-white, #FFF);
+}
   
   .user-info-right {
-    width: 100%;
+    padding: 20px;
     display: flex;
     align-items: center;
+    margin-left: auto; /* Moverá el elemento a la derecha */
   }
   
   .user-avatar {
@@ -221,7 +273,7 @@
   table td {
     padding: 10px;
     text-align: left;
-    border-bottom: 1px solid #333; /* Borde inferior gris */
+    /*border-bottom: 1px solid #333; /* Borde inferior gris */
   }
   
   table th {

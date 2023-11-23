@@ -12,6 +12,7 @@
     "@types/datatables.net": "^1.10.27",
     "@types/jquery": "^3.5.29",
     "axios": "^1.6.2",
+    "bootstrap": "^4.6.2",
     "core-js": "^3.8.3",
     "datatables.net": "^1.13.8",
     "datatables.net-bs5": "^1.13.8",
