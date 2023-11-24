@@ -29,9 +29,19 @@
               <h2 class="text-bold">Empleados</h2>
               <p>Gestiona tus empleados</p>
             </div>
+            
             <div class="col-4 text-right">
-                <button class="download-button m-2"><i class="fa fa-file-download"></i> Descargar</button>
-                <button class="new-button"><i class="fa fa-plus"></i> Nuevo</button>
+                <div v-if="isLoading" class="">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="skeleton-row"></div>
+                    </div>
+                  </div>
+                </div>
+                <div v-else>
+                  <button class="download-button m-2"><i class="fa fa-file-download"></i> Descargar</button>
+                  <button class="new-button"><i class="fa fa-plus"></i> Nuevo</button>
+                </div>
             </div>
           </div>
          
@@ -205,7 +215,6 @@
                   <option>Mostrar 50</option>
                   <option>Mostrar 100</option>
                 </select>
-                
               </div>
             </div>
           </div>
