@@ -221,7 +221,7 @@
   table td {
     padding: 10px;
     text-align: left;
-    border-bottom: 1px solid #333; /* Borde inferior gris */
+    /*border-bottom: 1px solid #333; /* Borde inferior gris */
   }
   
   table th {
