@@ -30,6 +30,7 @@
             <label for="password">Contraseña: <strong id="strong">*</strong></label>
             <input type="password" id="password" v-model="password" />
             <div v-if="errorMessage" id="error" class="error-message">
+              <br>
               <i class="fa fa-exclamation-circle"></i>
               {{ errorMessage }}
             </div>

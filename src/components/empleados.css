@@ -86,7 +86,7 @@
     }
   #firstrow{
     padding: 10px;
-  background-color: #F1F2F4;/**/
+  background-color: #F8F8F8;/**/
     }
   .skeleton-loading {
     height: 700px;  
@@ -94,6 +94,14 @@
     padding: 20px;
     border-radius: 4px;
     margin-bottom: 20px;
+  }
+  .skeleton-row-h {
+    height: 20px;
+    width: 100%;
+    margin-bottom: 10px;
+    background-color: #F1F2F4;
+    /**border circle */
+    border-radius: 15px;
   }
   .skeleton-row {
     height: 20px;

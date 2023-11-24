@@ -50,28 +50,28 @@
             <br>
             <div class="row" id="firstrow">
               <div class="col-1">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-2">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-2">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-1">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-2">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-1">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-2">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-1">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
             </div>
             <!-- ... generar un bucle para o filas ... -->
