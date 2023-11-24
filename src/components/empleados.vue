@@ -11,7 +11,7 @@
         <li class="active"><span class="material-symbols-outlined">group</span>  Empleados</li>
         <li><i class="fa fa-briefcase"></i> Reclutamiento</li>
       </ul>
-      <button class="logout-button">Salir</button>
+      <button class="logout-button" @click="salir()">Salir</button>
     </nav>
     <div id="maincontent">
       <div class="app-header">
@@ -241,6 +241,10 @@
           }
         },
         methods:{
+          salir(){
+            localStorage.removeItem('token');
+            this.$router.push('/');
+          },
           async loadTable(page: number){
             if(page < 1){
               return

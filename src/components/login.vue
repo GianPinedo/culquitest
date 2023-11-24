@@ -2,14 +2,20 @@
   <div id="app2">
       <div id="coluna1">
         <div id="logo">
-          <img id="bg" src="../../src/assets/login.png" alt="logo" width="800" />
+          <img id="bg" src="../../src/assets/login.png" alt="logo" width="100%" />
         </div>
+        <div class="linea"></div>
         <div id="texto">
-          <div class="izq">
-            <img id="logoimg" src="../../src/assets/logo_white.svg" alt="logo" width="50" />
+          <div>
+            <!--div una linea separadora con 10px -->
+            
+
+            <div class="izq">
+              <img id="logoimg" src="../../src/assets/logo_white.svg" alt="logo" width="50" />
+            </div>
+            <p id="texto2">Dale más power &#9889; a tus <br>empleados hoy &#x1F4AA;</p>
+            <p id="texto3">Te ayudamos a gestionarlos de manera más sencilla</p>
           </div>
-          <p id="texto2">Dale más power &#9889; a tus <br>empleados hoy &#x1F4AA;</p>
-          <p id="texto3">Te ayudamos a gestionarlos de manera más sencilla</p>
         </div>
       </div>
       <div id="coluna2">
