@@ -7,9 +7,6 @@
         <div class="linea"></div>
         <div id="texto">
           <div>
-            <!--div una linea separadora con 10px -->
-            
-
             <div class="izq">
               <img id="logoimg" src="../../src/assets/logo_white.svg" alt="logo" width="50" />
             </div>
@@ -49,7 +46,6 @@
           </div>
         </form>
       </div>
-    
   </div>
 </template>
 
@@ -84,7 +80,6 @@ export default defineComponent({
   methods: {
     async login() {
       this.isloading = true;
-      
       try {
         const response = await axios.post(apiUrl+'/auth/login', {
           correo: this.username,
@@ -102,7 +97,6 @@ export default defineComponent({
       } finally {
         this.isloading = false; 
       }
-      
     },
   },
 });

@@ -123,7 +123,6 @@
                     <option value="2">Inactivo</option>
                   </select>
                 </div>
-              
             </div>
             <table  id="empleados-table" class="display">
               <thead>
@@ -177,7 +176,7 @@
                 <nav aria-label="Page navigation">
                   <ul class="pagination">
                     <li class="page-item">
-                      <a class="page-link" @click="loadTable(paginaActual-1)" aria-label="Anterior">
+                      <a class="page-link" @click="loadTable(paginaActual--)" aria-label="Anterior">
                         <span aria-hidden="true">&laquo;</span>
                       </a>
                     </li>
@@ -189,7 +188,7 @@
                     <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 6 }" @click="loadTable(6)">6</a></li>
                     <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 7 }" @click="loadTable(7)">7</a></li>
                     <li class="page-item" :class="{ 'selected-page': paginaActual === 1 }">
-                      <a class="page-link" @click="loadTable(paginaActual+1)" aria-label="Siguiente">
+                      <a class="page-link" @click="loadTable(paginaActual++)" aria-label="Siguiente">
                         <span aria-hidden="true">&raquo;</span>
                       </a>
                     </li>
@@ -218,7 +217,6 @@
   <script lang="ts">
   /* global $ */
   import {defineComponent} from 'vue';
-  
   import $ from 'jquery';
   import 'datatables.net';
   import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
@@ -230,7 +228,6 @@
 
     export default defineComponent({
         name: 'EmpleadosL',
-        
         data() {
           return {
             isLoading : false,
