@@ -47,10 +47,12 @@
 </template>
 
 <script lang="ts">
+import './login.css'
 import { apiUrl } from '@/config';
 import axios from 'axios';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
+
 
 export default defineComponent({
   name: 'LoginV',
@@ -98,151 +100,4 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-/* Estilos CSS específicos del componente Login */
-#logo{
-  width: 100%;
-}
-.izq{
-  margin-left: 60px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: start;
-  gap: 10px;
-}
-#logoimg {
-  margin-top: 25px;
-  width: 100px;
-  flex-direction: column;
-  align-items: start;
-  gap: 32px;
-}
-#error {
-  color: red;
-  margin-bottom: 10px;
-}
-#texto2{
-  margin-left: 25px;
-  font-size: 30px;
-  font-weight: bold;
-}
-#texto{
-  /**todo el ancho */
-  width: 100%;
-  color: #fff;
-  background-color: #111827;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-#strong{
-  color: red;
-}
-#footer{
-  margin-top: 10%;
-  display: flex;
-  width: 490px;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
-}
-#creacta{
-  /*sin subrayar*/
-  text-decoration: none;
-  color: #0CAF60;
-}
-#boxBoton{
-  display: flex;
-  width: 490px;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 32px;
-}
-.boton{
-  width: 100%;
-  display: flex;
-  height: 56px;
-  padding: 21px 24px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  align-self: stretch;
-  border-radius: 10px;
-  background: var(--greyscale-900, #111827);
-}
-#app2 {
-  /*modificar fuente */
-  font-family: 'Roboto', sans-serif;
-  display: flex;
-  flex-direction: row;
-  align-items: center; /* Centra verticalmente los elementos en la fila */
-}
-
-#coluna1 {
-  flex: 1;
-  display: flex;
-  height: 100vh; /* Establece la altura al 100% de la ventana */
-  flex-direction: column;
-  align-items: center;
-  /* Otros estilos de la columna 1 */
-}
-
-#bg {
-  /* Estilos para la imagen en la primera columna */
-  max-width: 100%;
-  height: 450px;
-}
-
-#coluna2 {
-  flex: 1;
-  display: flex;
-  width: 720px;
-  padding: 24px 10px;
-  margin-right: 25px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-}
-#username, #password {
-  display: flex;
-  padding: 16px 20px;
-  align-items: flex-start;
-  gap: 10px;
-  align-self: stretch;
-  border-radius: 10px;
-  border: 1px solid var(--alerts-success-base, #A0AEC0);
-}
-h2 {
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-</style>
 

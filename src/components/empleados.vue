@@ -24,8 +24,17 @@
       </div>
       <div class="content">
         <div class="card">
-          <h2 class="text-blue-500">Empleados</h2>
-          <p>Gestiona tus empleados</p>
+          <div class="row">
+            <div class="col-8">
+              <h2 class="text-bold">Empleados</h2>
+              <p>Gestiona tus empleados</p>
+            </div>
+            <div class="col-4 align-right">
+                <button class="download-button m-2"><i class="fa fa-file-excel"></i> Descargar</button>
+                <button class="new-button"><i class="fa fa-plus"></i> Nuevo</button>
+            </div>
+          </div>
+         
           <div v-if="isLoading" class="skeleton-loading">
             <div class="row">
               <div class="col-4">
@@ -97,8 +106,7 @@
           <div v-else>
             <!--filters search input , select input-->
             <div class="filters">
-              
-                <div class="col-8">
+                <div class="col-8 p-0">
                   <div class="input-group">
                     <input type="text" class="form-control" placeholder="Buscar empleado">
                     <div class="input-group-append">
@@ -132,7 +140,7 @@
               <tbody>
                 <tr v-for="empleado in empleados" :key="empleado.id">
                   <!--<td>{{ empleado.id }}</td>-->
-                  <td>{{ empleado.nombre }}<br>
+                  <td><strong class="font-bold">{{ empleado.nombre }}</strong><br>
                     <small class="smallemail">{{ empleado.correo }}</small>
                   </td>
                   <!--<td>{{ empleado.correo }}</td>-->
@@ -164,9 +172,6 @@
               </tbody>
             </table>
           </div>
-           
-          
-
         </div>
       </div>
     </div>
@@ -175,12 +180,14 @@
   <script lang="ts">
   /* global $ */
   import {defineComponent} from 'vue';
+  
   import $ from 'jquery';
   import 'datatables.net';
   import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
   import '@fortawesome/fontawesome-free/css/all.css';
   import 'bootstrap/dist/css/bootstrap.css'; 
   import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+  import './empleados.css'
   import { apiUrl } from '@/config';
 
     export default defineComponent({
@@ -239,219 +246,6 @@
 
   </script>
 
-  <style scoped>
-  #btn1{
-    border-radius: 10px;
-  }
-  .input-group {
-      position: relative;
-    }
 
-    .input-group-append button {
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      display: flex;
-      align-items: center;
-      padding: 0.375rem 0.75rem;
-      border: none;
-      background-color: transparent;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .form-control{
-        border-radius: 10px;
-        border: 1px solid #E9EAEC;
-        padding: 20px;
-        width: 100%;
-        height: 60px;
-        font-size: 14px;
-        color: #111827;
-        background-color: #fff;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    }
-   .filters{
-    display: flex ;
-    padding-bottom: 25px;
-    background-color: #fff;/**/
-   }
-   .display{
-    color: #111827;
-    }
-    h2 {
-     /* color: #111827;*/
-    }
-    .smallemail{
-      color: #999;
-    }
-    #secondrow{
-      padding: 10px;
-      background-color: #fff;/**/
-      }
-    #firstrow{
-      padding: 10px;
-    background-color: #F1F2F4;/**/
-      }
-    .skeleton-loading {
-      height: 700px;  
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 4px;
-      margin-bottom: 20px;
-    }
-    .skeleton-row {
-      height: 20px;
-      width: 100%;
-      margin-bottom: 10px;
-      background-color: #F8F8F8;
-      /**border circle */
-      border-radius: 15px;
-    }
-  /* Estilos para el círculo naranja */
-    .active{
-      color: #00A19B !important;
-    }
-    .user-name{
-      font-weight: 600;
-      color: #111827;
-    }
-  .circle {
-    width: 25px;
-    height: 25px;
-    background-color: #EB6F25; /* Color naranja */
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-  }
-
-  .initials {
-    font-size: 10px;
-    font-weight: bold;
-    color: white; /* Texto blanco */
-  }
-
-    #maincontent {
-      width: 100%;
-      font-family: 'Poppins', sans-serif;
-    }
-    /* Estilos generales */
-    .app-container {
-      display: flex;
-      flex-direction: row;
-      height: auto;
-      background-color: #F8F8F8; /* Fondo gris */
-      color: #fff; /* Texto blanco */
-    }
-    
-    /* Estilos de la barra lateral */
-    .sidebar {
-      display: flex;
-      width: 280px;
-      height: 1200;
-      padding: 24px 32px;
-      flex-direction: column;
-      align-items: flex-start;
-      border-right: 1px solid var(--greyscale-300, #E9EAEC);
-      background: var(--others-white, #FFF);
-    }
-    
-    .logo img {
-      width: 100px;
-      height: 80px;
-      margin-bottom: 20px;
-    }
-    
-    .menu {
-      font-weight: bold;
-      height: 100%;
-      list-style: none;
-      padding: 0;
-    }
-    
-    .menu li {
-      padding: 10px;
-      font-family: 'Poppins', sans-serif;
-      color: #687588;
-      margin-bottom: 10px;
-    }
-    /**hover */card
-    .menu li:hover{
-      color: #00A19B !important;
-    }
-    
-    .logout-button {
-      width: 100%;
-      background-color: #fff; /* Fondo blanco */
-      color: #687588; /* Texto gris */
-      border: 2px solid #687588; /* Borde gris */
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    
-    /* Estilos del encabezado */
-    .app-header {
-    display: flex;
-    align-items: end;
-    height: 100px;
-    width: 100%;
-    border-right: 1px solid var(--greyscale-300, #E9EAEC);
-    background: var(--others-white, #FFF);
-    border-bottom: 1px solid var(--greyscale-300, #E9EAEC);
-    background: var(--others-white, #FFF);
-  }
-    
-    .user-info-right {
-      margin-top: 10px;
-      padding: 25px 25px 25px 25px;
-      display: flex;
-      align-items: center;
-      margin-left: auto; /* Moverá el elemento a la derecha */
-    }
-    
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-    
-    /* Estilos del contenido */
-    .content {
-      
-      flex: 2;
-      padding: 20px;
-      overflow: auto;
-    }
-    
-    .card {
-      color: #424346;
-      background-color: #fff; /* Fondo blanco */
-      border: 1px solid #fff; /* Borde gris */
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-    
-    /* Estilos de la tabla */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    
-    table th,
-    table td {
-      padding: 10px;
-      text-align: left;
-      border-bottom: 1px solid #F1F2F4; /* Borde inferior gris */
-    }
-    table th {
-      background-color: #FAFAFA; /* Fondo gris */
-      color: #767a80; /* Texto blanco */
-    }
-  </style>
   
   
