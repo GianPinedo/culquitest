@@ -44,7 +44,7 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
   }
   .input-focus {
     background-color: #00FF00; /* Cambia el color de fondo a verde */

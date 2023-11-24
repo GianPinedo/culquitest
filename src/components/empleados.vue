@@ -29,7 +29,6 @@
               <h2 class="text-bold">Empleados</h2>
               <p>Gestiona tus empleados</p>
             </div>
-            
             <div class="col-4 text-right">
                 <div v-if="isLoading" class="">
                   <div class="row">
