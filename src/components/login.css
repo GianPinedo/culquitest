@@ -1,9 +1,9 @@
 /* Estilos CSS específicos del componente Login */
-#logo{
-    width: 100%;
-  }
+  #logo{
+      width: 100%;
+    }
   .izq{
-    margin-left: 60px;
+    margin-left: 80px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -36,6 +36,10 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
+  }
+  .input-focus {
+    background-color: #00FF00; /* Cambia el color de fondo a verde */
+    /* Agrega otros estilos que desees para el input enfocado */
   }
   #strong{
     color: red;

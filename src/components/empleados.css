@@ -1,3 +1,25 @@
+.page-link{
+    color: #111827;
+}
+/* Estilo para resaltar la página actual */
+.selected-page {
+    background-color: #E9EAEC !important; /* Color de fondo para resaltar */
+    color: #111827 !important; /* Color del texto para resaltar */
+    font-weight: bold; /* Texto en negrita */
+  }
+/* Estilos para los botones personalizados */
+.rounded-button {
+    border-radius: 10px; /* Hace que los botones sean completamente redondeados */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Agrega una sombra 3D */
+    /*padding: 3px 3px; /* Ajusta el espaciado interno */
+    margin: 3px; /* Agrega margen entre los botones */
+  }
+  
+  /* Estilos para los íconos dentro de los botones */
+  .material-symbols-outlined {
+    font-size: 10px; /* Ajusta el tamaño del ícono */
+    /*margin-right: 5px; /* Agrega un espacio entre el ícono y el texto */
+  }
 .text-bold{
     font-weight: bold;
 }
@@ -20,6 +42,18 @@
     background-color: transparent;
     border-radius: 10px;
     cursor: pointer;
+  }
+  #recordsPerPage{
+      border-radius: 10px;
+      border: 1px solid #E9EAEC;
+      padding: 10px;
+      
+      height: 60px;
+      font-size: 14px;
+      color: #111827;
+      background-color: #fff;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
   }
   .form-control{
       border-radius: 10px;

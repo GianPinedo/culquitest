@@ -29,8 +29,8 @@
               <h2 class="text-bold">Empleados</h2>
               <p>Gestiona tus empleados</p>
             </div>
-            <div class="col-4 align-right">
-                <button class="download-button m-2"><i class="fa fa-file-excel"></i> Descargar</button>
+            <div class="col-4 text-right">
+                <button class="download-button m-2"><i class="fa fa-file-download"></i> Descargar</button>
                 <button class="new-button"><i class="fa fa-plus"></i> Nuevo</button>
             </div>
           </div>
@@ -150,27 +150,65 @@
                   <td>{{ empleado.estadoCuenta }}</td>
                   <td>
                     <!--buton view-->
-                    <button class="btn btn-success btn-sm m-1" data-toggle="modal" data-target="#viewModal">
+                    <button class="rounded-button btn btn-success btn-sm m-1" data-toggle="modal" data-target="#viewModal">
                       <span class="material-symbols-outlined">
-                      visibility
+                        visibility
                       </span>
                     </button>
-                    <!--edit buton-->
-                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#viewModal">
+                    <!--edit button-->
+                    <button class="rounded-button btn btn-primary btn-sm" data-toggle="modal" data-target="#viewModal">
                       <span class="material-symbols-outlined">
-                      edit
+                        edit
                       </span>
                     </button>
-                    <!--edit buton-->
-                    <button class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#viewModal">
+                    <!--delete button-->
+                    <button class="rounded-button btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#viewModal">
                       <span class="material-symbols-outlined">
-                      delete
+                        delete
                       </span>
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <!-- Paginador -->
+                <nav aria-label="Page navigation">
+                  <ul class="pagination">
+                    <li class="page-item">
+                      <a class="page-link" @click="loadTable(paginaActual-1)" aria-label="Anterior">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 1 }" @click="loadTable(1)">1</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 2 }" @click="loadTable(2)">2</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 3 }" @click="loadTable(3)">3</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 4 }" @click="loadTable(4)">4</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 5 }" @click="loadTable(5)">5</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 6 }" @click="loadTable(6)">6</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 7 }" @click="loadTable(7)">7</a></li>
+                    <li class="page-item" :class="{ 'selected-page': paginaActual === 1 }">
+                      <a class="page-link" @click="loadTable(paginaActual+1)" aria-label="Siguiente">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+              <div class="col-md-6 text-right">
+                <!-- Texto "Mostrando X a Y de Z registros" y select -->
+                Mostrando {{ paginaActual }} a 8 de {{ totalRegistros }} registros
+                <label for="recordsPerPage" class="mr-2"> </label>
+                <select id="recordsPerPage" class="p-2">
+                  <option>Mostrar 8</option>
+                  <option>Mostrar 25</option>
+                  <option>Mostrar 50</option>
+                  <option>Mostrar 100</option>
+                </select>
+                
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -192,58 +230,69 @@
 
     export default defineComponent({
         name: 'EmpleadosL',
+        
         data() {
-        return {
-          isLoading : false,
-          empleados: [] as any[], 
-          paginaActual: 1,
-          totalPaginas: 0,
-        }
-      },
-      mounted() {
-        this.isLoading = true;
-        const token = localStorage.getItem('token');
-        if (!token) {
-          console.error('No se encontró el token en localStorage');
-          return;
-        }
-        console.log(token)
-        const headers = new Headers();
-        const dataTable = $('#empleados-table').DataTable({
-          paging: true,
-          lengthChange: false,
-          searching: false,
-        });
-        $('#empleados-table').on('page.dt', () => {
-          const pageInfo = dataTable.page.info();
-          const currentPage = pageInfo.page + 1; 
-          const totalShowing = pageInfo.end - pageInfo.start + 1;
-          this.paginaActual = currentPage;
-          this.totalPaginas = totalShowing;
-          console.log('Número actual de página:', currentPage);
-          console.log('Total mostrando:', totalShowing);
-        });
-        headers.append('Authorization', `Bearer ${token}`);
-        const apiEndpoint = `${apiUrl}/empleados?limit=8&page=${this.paginaActual}`; 
-    
-        fetch(apiEndpoint, {
-          method: 'GET', 
-          headers: headers,
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            this.empleados = data.data;
-            this.isLoading = false; 
-            // this.$nextTick(() => {
-            //   $('#empleados-table').DataTable();
-            // });
-          })
-          .catch((error) => {
-            console.error('Error al obtener los datos de la API:', error);
-          });
-      },
+          return {
+            isLoading : false,
+            empleados: [] as any[], 
+            paginaActual: 1,
+            totalRegistros: 0,
+            totalPaginas: 0,
+          }
+        },
+        methods:{
+          async loadTable(page: number){
+            if(page < 1){
+              return
+            }
+            this.isLoading = true;
+            this.paginaActual = page;
+            const token = localStorage.getItem('token');
+            if (!token) {
+              console.error('No se encontró el token en localStorage');
+              return;
+            }
+            console.log(token)
+            const headers = new Headers();
+            const dataTable = $('#empleados-table').DataTable({
+              paging: true,
+              lengthChange: false,
+              searching: false,
+            });
+            $('#empleados-table').on('page.dt', () => {
+              const pageInfo = dataTable.page.info();
+              const currentPage = pageInfo.page + 1; 
+              const totalShowing = pageInfo.end - pageInfo.start + 1;
+              this.paginaActual = currentPage;
+              this.totalPaginas = totalShowing;
+              console.log('Número actual de página:', currentPage);
+              console.log('Total mostrando:', totalShowing);
+            });
+            headers.append('Authorization', `Bearer ${token}`);
+            const apiEndpoint = `${apiUrl}/empleados?limit=8&page=${page}`; 
+        
+            fetch(apiEndpoint, {
+              method: 'GET', 
+              headers: headers,
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                this.empleados = data.data;
+                this.totalRegistros = data.total
+                this.isLoading = false; 
+                // this.$nextTick(() => {
+                //   $('#empleados-table').DataTable();
+                // });
+              })
+              .catch((error) => {
+                console.error('Error al obtener los datos de la API:', error);
+              });
+          }
+        },
+        mounted() {
+          this.loadTable(1);
+        }, 
     });
-
   </script>
 
 
