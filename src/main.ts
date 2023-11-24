@@ -5,6 +5,7 @@ import Login from './components/login.vue';
 import Empleados from './components/empleados.vue';
 import 'jquery';
 import 'datatables.net';
+import './index.css'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -22,6 +23,6 @@ const router = createRouter({
   ],
 });
 
-const app = createApp(Empleados).use(router);
+const app = createApp(App).use(router);
 
 app.mount('#app');
