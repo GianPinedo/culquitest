@@ -89,6 +89,7 @@ export default defineComponent({
           this.errorMessage = response.data.message;
         } else {
           localStorage.setItem('token', response.data.data.token);
+          localStorage.setItem('usuario', response.data.data.user.nombre);
           this.$router.push('/empleados'); 
         }
       } catch (error) {

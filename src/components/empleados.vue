@@ -17,9 +17,9 @@
       <div class="app-header">
         <div class="user-info-right">
           <div class="circle">
-            <span class="initials">CQ</span>
+            <span class="initials">{{siglas}}</span>
           </div>
-          <span class="user-name">Christian Quispe</span>
+          <span class="user-name">{{ nombreUsuario }}</span>
         </div>
       </div>
       <div class="content">
@@ -222,87 +222,83 @@
     </div>
   </div>
 </template>
-  <script lang="ts">
-  /* global $ */
-  import {defineComponent} from 'vue';
-  import $ from 'jquery';
-  import 'datatables.net';
-  import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-  import '@fortawesome/fontawesome-free/css/all.css';
-  import 'bootstrap/dist/css/bootstrap.css'; 
-  import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-  import './empleados.css'
-  import { apiUrl } from '@/config';
+<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue';
+import $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import '@fortawesome/fontawesome-free/css/all.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import './empleados.css';
+import { apiUrl } from '@/config';
 
-    export default defineComponent({
-        name: 'EmpleadosL',
-        data() {
-          return {
-            isLoading : false,
-            empleados: [] as any[], 
-            paginaActual: 1,
-            totalRegistros: 0,
-            totalPaginas: 0,
-          }
-        },
-        methods:{
-          salir(){
-            localStorage.removeItem('token');
-            this.$router.push('/');
-          },
-          async loadTable(page: number){
-            if(page < 1){
-              return
-            }
-            this.isLoading = true;
-            this.paginaActual = page;
-            const token = localStorage.getItem('token');
-            if (!token) {
-              console.error('No se encontró el token en localStorage');
-              return;
-            }
-            console.log(token)
-            const headers = new Headers();
-            const dataTable = $('#empleados-table').DataTable({
-              paging: true,
-              lengthChange: false,
-              searching: false,
-            });
-            $('#empleados-table').on('page.dt', () => {
-              const pageInfo = dataTable.page.info();
-              const currentPage = pageInfo.page + 1; 
-              const totalShowing = pageInfo.end - pageInfo.start + 1;
-              this.paginaActual = currentPage;
-              this.totalPaginas = totalShowing;
-              console.log('Número actual de página:', currentPage);
-              console.log('Total mostrando:', totalShowing);
-            });
-            headers.append('Authorization', `Bearer ${token}`);
-            const apiEndpoint = `${apiUrl}/empleados?limit=8&page=${page}`; 
-        
-            fetch(apiEndpoint, {
-              method: 'GET', 
-              headers: headers,
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                this.empleados = data.data;
-                this.totalRegistros = data.total
-                this.isLoading = false; 
-                // this.$nextTick(() => {
-                //   $('#empleados-table').DataTable();
-                // });
-              })
-              .catch((error) => {
-                console.error('Error al obtener los datos de la API:', error);
-              });
-          }
-        },
-        mounted() {
-          this.loadTable(1);
-        }, 
+export default defineComponent({
+  name: 'EmpleadosL',
+  setup() {
+    const isLoading = ref(false);
+    const empleados = ref<any[]>([]);
+    const paginaActual = ref(1);
+    const totalRegistros = ref(0);
+    const totalPaginas = ref(0);
+    const nombreUsuario = ref('');
+    const siglas = ref('');
+
+    const salir = () => {
+      localStorage.removeItem('token');
+      // Si estás utilizando Vue Router, puedes redirigir aquí
+    };
+
+    const loadTable = async (page: number) => {
+      if (page < 1) {
+        return;
+      }
+      isLoading.value = true;
+      paginaActual.value = page;
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No se encontró el token en localStorage');
+        return;
+      }
+
+      const headers = new Headers();
+      headers.append('Authorization', `Bearer ${token}`);
+      const apiEndpoint = `${apiUrl}/empleados?limit=8&page=${page}`;
+
+      try {
+        const response = await fetch(apiEndpoint, {
+          method: 'GET',
+          headers: headers,
+        });
+        const data = await response.json();
+        empleados.value = data.data;
+        totalRegistros.value = data.total;
+        isLoading.value = false;
+      } catch (error) {
+        console.error('Error al obtener los datos de la API:', error);
+      }
+    };
+
+    onMounted(() => {
+      loadTable(1);
+      nombreUsuario.value = localStorage.getItem('usuario') || '';
+      siglas.value = nombreUsuario.value.split(' ').map((n) => n[0]).join('').toUpperCase();
     });
-  </script>
+
+    return {
+      isLoading,
+      empleados,
+      paginaActual,
+      totalRegistros,
+      totalPaginas,
+      nombreUsuario,
+      siglas,
+      salir,
+      loadTable,
+    };
+  },
+});
+</script>
 
 
   
