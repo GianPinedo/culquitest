@@ -224,6 +224,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
@@ -232,10 +233,12 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './empleados.css';
 import { apiUrl } from '@/config';
+import router from '@/routes';
 
 export default defineComponent({
   name: 'EmpleadosL',
   setup() {
+    const router = useRouter();
     const isLoading = ref(false);
     const empleados = ref<any[]>([]);
     const paginaActual = ref(1);
@@ -246,7 +249,8 @@ export default defineComponent({
 
     const salir = () => {
       localStorage.removeItem('token');
-      // Si estás utilizando Vue Router, puedes redirigir aquí
+      router.push('/');
+      
     };
 
     const loadTable = async (page: number) => {
