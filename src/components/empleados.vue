@@ -1,5 +1,4 @@
 <template>
-  
   <div class="app-container">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Poppins:wght@200&display=swap" rel="stylesheet">
@@ -19,7 +18,7 @@
           <div class="circle">
             <span class="initials">{{siglas}}</span>
           </div>
-          <span class="user-name">{{ nombreUsuario }}</span>
+          <span class="user-name">{{ username }}</span>
         </div>
       </div>
       <div class="content">
@@ -43,7 +42,6 @@
                 </div>
             </div>
           </div>
-         
           <div v-if="isLoading" class="skeleton-loading">
             <div class="row">
               <div class="col-4">
@@ -83,7 +81,7 @@
                 <div class="skeleton-row-h"></div>
               </div>
             </div>
-            <!-- ... generar un bucle para o filas ... -->
+            <!-- ... add a loop for 9 rows ... -->
             <div v-for="n in 9" :key="n" class="row" id="secondrow">
               <div class="col-1">
                 <div class="skeleton-row"></div>
@@ -110,7 +108,7 @@
                 <div class="skeleton-row"></div>
               </div>
             </div>
-            <!-- ... Agrega más filas según sea necesario ... -->
+            <!-- ... end loop ... -->
           </div>
           <div v-else>
             <!--filters search input , select input-->
@@ -146,7 +144,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="empleado in empleados" :key="empleado.id">
+                <tr v-for="empleado in employers" :key="empleado.id">
                   <!--<td>{{ empleado.id }}</td>-->
                   <td><strong class="font-bold">{{ empleado.nombre }}</strong><br>
                     <small class="smallemail">{{ empleado.correo }}</small>
@@ -185,19 +183,19 @@
                 <nav aria-label="Page navigation">
                   <ul class="pagination">
                     <li class="page-item">
-                      <a class="page-link" @click="loadTable(paginaActual-1)" aria-label="Anterior">
+                      <a class="page-link" @click="loadTable(currentPage-1)" aria-label="Anterior">
                         <span aria-hidden="true">&laquo;</span>
                       </a>
                     </li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 1 }" @click="loadTable(1)">1</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 2 }" @click="loadTable(2)">2</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 3 }" @click="loadTable(3)">3</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 4 }" @click="loadTable(4)">4</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 5 }" @click="loadTable(5)">5</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 6 }" @click="loadTable(6)">6</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 7 }" @click="loadTable(7)">7</a></li>
-                    <li class="page-item" :class="{ 'selected-page': paginaActual === 1 }">
-                      <a class="page-link" @click="loadTable(paginaActual+1)" aria-label="Siguiente">
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 1 }" @click="loadTable(1)">1</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 2 }" @click="loadTable(2)">2</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 3 }" @click="loadTable(3)">3</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 4 }" @click="loadTable(4)">4</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 5 }" @click="loadTable(5)">5</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 6 }" @click="loadTable(6)">6</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 7 }" @click="loadTable(7)">7</a></li>
+                    <li class="page-item" :class="{ 'selected-page': currentPage === 1 }">
+                      <a class="page-link" @click="loadTable(currentPage+1)" aria-label="Siguiente">
                         <span aria-hidden="true">&raquo;</span>
                       </a>
                     </li>
@@ -206,7 +204,7 @@
               </div>
               <div class="col-md-6 text-right">
                 <!-- Texto "Mostrando X a Y de Z registros" y select -->
-                Mostrando {{ paginaActual }} a 8 de {{ totalRegistros }} registros
+                Mostrando {{ currentPage }} a 8 de {{ totalRegistros }} registros
                 <label for="recordsPerPage" class="mr-2"> </label>
                 <select id="recordsPerPage" class="p-2">
                   <option>Mostrar 8</option>
@@ -233,24 +231,24 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './empleados.css';
 import { apiUrl } from '@/config';
-import router from '@/routes';
+
 
 export default defineComponent({
   name: 'EmpleadosL',
   setup() {
     const router = useRouter();
     const isLoading = ref(false);
-    const empleados = ref<any[]>([]);
-    const paginaActual = ref(1);
+    const employers = ref<any[]>([]);
+    const currentPage = ref(1);
     const totalRegistros = ref(0);
     const totalPaginas = ref(0);
-    const nombreUsuario = ref('');
+    const username = ref('');
     const siglas = ref('');
 
     const salir = () => {
       localStorage.removeItem('token');
+      localStorage.removeItem('usuario');
       router.push('/');
-      
     };
 
     const loadTable = async (page: number) => {
@@ -258,7 +256,7 @@ export default defineComponent({
         return;
       }
       isLoading.value = true;
-      paginaActual.value = page;
+      currentPage.value = page;
       const token = localStorage.getItem('token');
       if (!token) {
         console.error('No se encontró el token en localStorage');
@@ -275,7 +273,7 @@ export default defineComponent({
           headers: headers,
         });
         const data = await response.json();
-        empleados.value = data.data;
+        employers.value = data.data;
         totalRegistros.value = data.total;
         isLoading.value = false;
       } catch (error) {
@@ -284,18 +282,19 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      loadTable(1);
-      nombreUsuario.value = localStorage.getItem('usuario') || '';
-      siglas.value = nombreUsuario.value.split(' ').map((n) => n[0]).join('').toUpperCase();
+      loadTable(1); //initial page 1
+      //get user name from local storage and set initials letters
+      username.value = localStorage.getItem('usuario') || '';
+      siglas.value = username.value.split(' ').map((n) => n[0]).join('').toUpperCase();
     });
 
     return {
       isLoading,
-      empleados,
-      paginaActual,
+      employers,
+      currentPage,
       totalRegistros,
       totalPaginas,
-      nombreUsuario,
+      username,
       siglas,
       salir,
       loadTable,

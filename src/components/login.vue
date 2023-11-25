@@ -35,7 +35,7 @@
           <br>
           <div id="boxBoton">
             <!--is loading design-->
-            <button v-if="isloading" disabled class="boton">
+            <button v-if="isLoading" disabled class="boton">
               <i class="fa fa-spinner fa-spin"></i>
               Iniciando sesión...
             </button>
@@ -51,54 +51,54 @@
 
 <script lang="ts">
 import './login.css'
-import { apiUrl } from '@/config';
-import axios from 'axios';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
-
+import axios from 'axios';
+import { apiUrl } from '@/config';
 
 export default defineComponent({
   name: 'LoginV',
-  data() {
-    return {
-      username: 'c.quispe@culqi.com',
-      password: '',
-      errorMessage: '',
-      isloading: false,
-    };
-  },
   setup() {
+    const username = ref('c.quispe@culqi.com');
+    const password = ref('');
+    const errorMessage = ref('');
+    const isLoading = ref(false);
     const router = useRouter();
+
     const goToEmpleados = () => {
       router.push('/empleados');
     };
 
-    return {
-      goToEmpleados,
-    };
-  },
-  methods: {
-    async login() {
-      this.isloading = true;
+    const login = async () => {
+      isLoading.value = true;
       try {
-        const response = await axios.post(apiUrl+'/auth/login', {
-          correo: this.username,
-          password: this.password,
+        const response = await axios.post(apiUrl + '/auth/login', {
+          correo: username.value,
+          password: password.value,
         });
         if (response.data.status === 'error') {
-          this.errorMessage = response.data.message;
+          errorMessage.value = response.data.message;
         } else {
           localStorage.setItem('token', response.data.data.token);
           localStorage.setItem('usuario', response.data.data.user.nombre);
-          this.$router.push('/empleados'); 
+          goToEmpleados();
         }
       } catch (error) {
-        this.errorMessage = 'Correo o contraseña incorrectos';
+        errorMessage.value = 'Correo o contraseña incorrectos';
         console.error('Error al iniciar sesión:', error);
       } finally {
-        this.isloading = false; 
+        isLoading.value = false;
       }
-    },
+    };
+
+    return {
+      username,
+      password,
+      errorMessage,
+      isLoading,
+      goToEmpleados,
+      login,
+    };
   },
 });
 </script>
