@@ -1,9 +1,17 @@
 /* Estilos CSS específicos del componente Login */
+.linea{
+  width: 100%;
+  height: 10px;
+  background-color: #0CAF60;
+}
   #logo{
       width: 100%;
     }
   .izq{
-    margin-left: 80px;
+    /*margin-left: 80px;*/
+    padding: 0px;
+    margin-bottom: 15px;
+    margin-top: 20px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -22,20 +30,21 @@
     margin-bottom: 10px;
   }
   #texto2{
-    margin-left: 25px;
+    /*margin-left: 25px;*/
     font-size: 30px;
     font-weight: bold;
   }
   #texto{
     /**todo el ancho */
     width: 100%;
+    height: 100%;
     color: #fff;
     background-color: #111827;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
   }
   .input-focus {
     background-color: #00FF00; /* Cambia el color de fondo a verde */

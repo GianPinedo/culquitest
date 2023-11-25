@@ -2,14 +2,17 @@
   <div id="app2">
       <div id="coluna1">
         <div id="logo">
-          <img id="bg" src="../../src/assets/login.png" alt="logo" width="800" />
+          <img id="bg" src="../../src/assets/login.png" alt="logo" width="100%" />
         </div>
+        <div class="linea"></div>
         <div id="texto">
-          <div class="izq">
-            <img id="logoimg" src="../../src/assets/logo_white.svg" alt="logo" width="50" />
+          <div>
+            <div class="izq">
+              <img id="logoimg" src="../../src/assets/logo_white.svg" alt="logo" width="50" />
+            </div>
+            <p id="texto2">Dale más power &#9889; a tus <br>empleados hoy &#x1F4AA;</p>
+            <p id="texto3">Te ayudamos a gestionarlos de manera más sencilla</p>
           </div>
-          <p id="texto2">Dale más power &#9889; a tus <br>empleados hoy &#x1F4AA;</p>
-          <p id="texto3">Te ayudamos a gestionarlos de manera más sencilla</p>
         </div>
       </div>
       <div id="coluna2">
@@ -24,6 +27,7 @@
             <label for="password">Contraseña: <strong id="strong">*</strong></label>
             <input type="password" id="password" v-model="password" />
             <div v-if="errorMessage" id="error" class="error-message">
+              <br>
               <i class="fa fa-exclamation-circle"></i>
               {{ errorMessage }}
             </div>
@@ -42,7 +46,6 @@
           </div>
         </form>
       </div>
-    
   </div>
 </template>
 
@@ -77,7 +80,6 @@ export default defineComponent({
   methods: {
     async login() {
       this.isloading = true;
-      
       try {
         const response = await axios.post(apiUrl+'/auth/login', {
           correo: this.username,
@@ -95,7 +97,6 @@ export default defineComponent({
       } finally {
         this.isloading = false; 
       }
-      
     },
   },
 });

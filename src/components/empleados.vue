@@ -11,7 +11,7 @@
         <li class="active"><span class="material-symbols-outlined">group</span>  Empleados</li>
         <li><i class="fa fa-briefcase"></i> Reclutamiento</li>
       </ul>
-      <button class="logout-button">Salir</button>
+      <button class="logout-button" @click="salir()">Salir</button>
     </nav>
     <div id="maincontent">
       <div class="app-header">
@@ -30,8 +30,17 @@
               <p>Gestiona tus empleados</p>
             </div>
             <div class="col-4 text-right">
-                <button class="download-button m-2"><i class="fa fa-file-download"></i> Descargar</button>
-                <button class="new-button"><i class="fa fa-plus"></i> Nuevo</button>
+                <div v-if="isLoading" class="">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="skeleton-row"></div>
+                    </div>
+                  </div>
+                </div>
+                <div v-else>
+                  <button class="download-button m-2"><i class="fa fa-file-download"></i> Descargar</button>
+                  <button class="new-button"><i class="fa fa-plus"></i> Nuevo</button>
+                </div>
             </div>
           </div>
          
@@ -50,28 +59,28 @@
             <br>
             <div class="row" id="firstrow">
               <div class="col-1">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-2">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-2">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-1">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-2">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-1">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-2">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
               <div class="col-1">
-                <div class="skeleton-row"></div>
+                <div class="skeleton-row-h"></div>
               </div>
             </div>
             <!-- ... generar un bucle para o filas ... -->
@@ -123,7 +132,6 @@
                     <option value="2">Inactivo</option>
                   </select>
                 </div>
-              
             </div>
             <table  id="empleados-table" class="display">
               <thead>
@@ -206,7 +214,6 @@
                   <option>Mostrar 50</option>
                   <option>Mostrar 100</option>
                 </select>
-                
               </div>
             </div>
           </div>
@@ -218,7 +225,6 @@
   <script lang="ts">
   /* global $ */
   import {defineComponent} from 'vue';
-  
   import $ from 'jquery';
   import 'datatables.net';
   import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
@@ -230,7 +236,6 @@
 
     export default defineComponent({
         name: 'EmpleadosL',
-        
         data() {
           return {
             isLoading : false,
@@ -241,6 +246,10 @@
           }
         },
         methods:{
+          salir(){
+            localStorage.removeItem('token');
+            this.$router.push('/');
+          },
           async loadTable(page: number){
             if(page < 1){
               return
