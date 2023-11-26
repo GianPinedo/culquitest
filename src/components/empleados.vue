@@ -183,19 +183,19 @@
                 <nav aria-label="Page navigation">
                   <ul class="pagination">
                     <li class="page-item">
-                      <a class="page-link" @click="loadTable(currentPage-1)" aria-label="Anterior">
+                      <a class="page-link" @click="loadTable(currentPage-1,limit)" aria-label="Anterior">
                         <span aria-hidden="true">&laquo;</span>
                       </a>
                     </li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 1 }" @click="loadTable(1)">1</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 2 }" @click="loadTable(2)">2</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 3 }" @click="loadTable(3)">3</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 4 }" @click="loadTable(4)">4</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 5 }" @click="loadTable(5)">5</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 6 }" @click="loadTable(6)">6</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 7 }" @click="loadTable(7)">7</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 1 }" @click="loadTable(1,limit)">1</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 2 }" @click="loadTable(2,limit)">2</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 3 }" @click="loadTable(3,limit)">3</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 4 }" @click="loadTable(4,limit)">4</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 5 }" @click="loadTable(5,limit)">5</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 6 }" @click="loadTable(6,limit)">6</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 7 }" @click="loadTable(7,limit)">7</a></li>
                     <li class="page-item" :class="{ 'selected-page': currentPage === 1 }">
-                      <a class="page-link" @click="loadTable(currentPage+1)" aria-label="Siguiente">
+                      <a class="page-link" @click="loadTable(currentPage+1,limit)" aria-label="Siguiente">
                         <span aria-hidden="true">&raquo;</span>
                       </a>
                     </li>
@@ -204,13 +204,13 @@
               </div>
               <div class="col-md-6 text-right">
                 <!-- Texto "Mostrando X a Y de Z registros" y select -->
-                Mostrando {{ currentPage }} a 8 de {{ totalRegistros }} registros
+                Mostrando {{ ((currentPage-1)*limit)+1 }} a {{ currentPage*limit }} de {{ totalRegistros }} registros
                 <label for="recordsPerPage" class="mr-2"> </label>
-                <select id="recordsPerPage" class="p-2">
-                  <option>Mostrar 8</option>
-                  <option>Mostrar 25</option>
-                  <option>Mostrar 50</option>
-                  <option>Mostrar 100</option>
+                <select id="recordsPerPage" class="p-2" v-model="limit" @change="loadTable(currentPage,limit)">
+                  <option value="8">Mostrar 8</option>
+                  <option value="16">Mostrar 16</option>
+                  <option value="24">Mostrar 24</option>
+                  <option value="32">Mostrar 32</option>
                 </select>
               </div>
             </div>
@@ -240,6 +240,7 @@ export default defineComponent({
     const isLoading = ref(false);
     const employers = ref<any[]>([]);
     const currentPage = ref(1);
+    const limit = ref(8);
     const totalRegistros = ref(0);
     const totalPaginas = ref(0);
     const username = ref('');
@@ -251,7 +252,7 @@ export default defineComponent({
       router.push('/');
     };
 
-    const loadTable = async (page: number) => {
+    const loadTable = async (page: number, limit: number) => {
       if (page < 1) {
         return;
       }
@@ -265,7 +266,7 @@ export default defineComponent({
 
       const headers = new Headers();
       headers.append('Authorization', `Bearer ${token}`);
-      const apiEndpoint = `${apiUrl}/empleados?limit=8&page=${page}`;
+      const apiEndpoint = `${apiUrl}/empleados?limit=${limit}&page=${page}`;
 
       try {
         const response = await fetch(apiEndpoint, {
@@ -282,7 +283,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      loadTable(1); //initial page 1
+      loadTable(1,8); //initial page 1
       //get user name from local storage and set initials letters
       username.value = localStorage.getItem('usuario') || '';
       siglas.value = username.value.split(' ').map((n) => n[0]).join('').toUpperCase();
@@ -292,6 +293,7 @@ export default defineComponent({
       isLoading,
       employers,
       currentPage,
+      limit,
       totalRegistros,
       totalPaginas,
       username,
