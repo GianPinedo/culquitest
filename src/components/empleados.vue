@@ -204,7 +204,7 @@
               </div>
               <div class="col-md-6 text-right">
                 <!-- Texto "Mostrando X a Y de Z registros" y select -->
-                Mostrando {{ ((currentPage-1)*limit)+1 }} a {{ currentPage*limit }} de {{ totalRegistros }} registros
+                Mostrando {{ startIndex }} a {{ endIndex }} de {{ totalRegistros }} registros
                 <label for="recordsPerPage" class="mr-2"> </label>
                 <select id="recordsPerPage" class="p-2" v-model="limit" @change="loadTable(currentPage,limit)">
                   <option value="8">Mostrar 8</option>
@@ -221,7 +221,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted , computed} from 'vue';
 import { useRouter } from 'vue-router';
 import $ from 'jquery';
 import 'datatables.net';
@@ -245,6 +245,8 @@ export default defineComponent({
     const totalPaginas = ref(0);
     const username = ref('');
     const siglas = ref('');
+    const startIndex = computed(() => ((currentPage.value - 1) * limit.value) + 1);
+    const endIndex = computed(() => Math.min(currentPage.value * limit.value, totalRegistros.value));
 
     const salir = () => {
       localStorage.removeItem('token');
@@ -294,6 +296,8 @@ export default defineComponent({
       employers,
       currentPage,
       limit,
+      startIndex,
+      endIndex,
       totalRegistros,
       totalPaginas,
       username,
