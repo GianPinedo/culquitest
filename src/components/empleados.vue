@@ -1,5 +1,4 @@
 <template>
-  
   <div class="app-container">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Poppins:wght@200&display=swap" rel="stylesheet">
@@ -43,7 +42,6 @@
                 </div>
             </div>
           </div>
-         
           <div v-if="isLoading" class="skeleton-loading">
             <div class="row">
               <div class="col-4">
@@ -83,7 +81,7 @@
                 <div class="skeleton-row-h"></div>
               </div>
             </div>
-            <!-- ... generar un bucle para o filas ... -->
+            <!-- ... generar un bucle para 9 filas ... -->
             <div v-for="n in 9" :key="n" class="row" id="secondrow">
               <div class="col-1">
                 <div class="skeleton-row"></div>
@@ -136,7 +134,6 @@
             <table  id="empleados-table" class="display">
               <thead>
                 <tr>
-                  <!--<th>ID</th>-->
                   <th>Nombre</th>
                   <th>Nombre cargo</th>
                   <th>Departamento</th>
@@ -147,29 +144,24 @@
               </thead>
               <tbody>
                 <tr v-for="empleado in empleados" :key="empleado.id">
-                  <!--<td>{{ empleado.id }}</td>-->
                   <td><strong class="font-bold">{{ empleado.nombre }}</strong><br>
                     <small class="smallemail">{{ empleado.correo }}</small>
                   </td>
-                  <!--<td>{{ empleado.correo }}</td>-->
                   <td>{{ empleado.cargo }}</td>
                   <td>{{ empleado.departamento }}</td>
                   <td>{{ empleado.oficina }}</td>
                   <td>{{ empleado.estadoCuenta }}</td>
                   <td>
-                    <!--buton view-->
                     <button class="rounded-button btn btn-success btn-sm m-1" data-toggle="modal" data-target="#viewModal">
                       <span class="material-symbols-outlined">
                         visibility
                       </span>
                     </button>
-                    <!--edit button-->
                     <button class="rounded-button btn btn-primary btn-sm" data-toggle="modal" data-target="#viewModal">
                       <span class="material-symbols-outlined">
                         edit
                       </span>
                     </button>
-                    <!--delete button-->
                     <button class="rounded-button btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#viewModal">
                       <span class="material-symbols-outlined">
                         delete
@@ -279,7 +271,6 @@
             });
             headers.append('Authorization', `Bearer ${token}`);
             const apiEndpoint = `${apiUrl}/empleados?limit=8&page=${page}`; 
-        
             fetch(apiEndpoint, {
               method: 'GET', 
               headers: headers,

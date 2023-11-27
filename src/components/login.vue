@@ -48,14 +48,12 @@
       </div>
   </div>
 </template>
-
 <script lang="ts">
 import './login.css'
 import { apiUrl } from '@/config';
 import axios from 'axios';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
-
 
 export default defineComponent({
   name: 'LoginV',
