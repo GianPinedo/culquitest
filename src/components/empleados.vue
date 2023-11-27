@@ -16,9 +16,9 @@
       <div class="app-header">
         <div class="user-info-right">
           <div class="circle">
-            <span class="initials">CQ</span>
+            <span class="initials">{{siglas}}</span>
           </div>
-          <span class="user-name">Christian Quispe</span>
+          <span class="user-name">{{ username }}</span>
         </div>
       </div>
       <div class="content">
@@ -81,7 +81,7 @@
                 <div class="skeleton-row-h"></div>
               </div>
             </div>
-            <!-- ... generar un bucle para 9 filas ... -->
+            <!-- ... add a loop for 9 rows ... -->
             <div v-for="n in 9" :key="n" class="row" id="secondrow">
               <div class="col-1">
                 <div class="skeleton-row"></div>
@@ -108,7 +108,7 @@
                 <div class="skeleton-row"></div>
               </div>
             </div>
-            <!-- ... Agrega más filas según sea necesario ... -->
+            <!-- ... end loop ... -->
           </div>
           <div v-else>
             <!--filters search input , select input-->
@@ -143,7 +143,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="empleado in empleados" :key="empleado.id">
+                <tr v-for="empleado in employers" :key="empleado.id">
+                  <!--<td>{{ empleado.id }}</td>-->
                   <td><strong class="font-bold">{{ empleado.nombre }}</strong><br>
                     <small class="smallemail">{{ empleado.correo }}</small>
                   </td>
@@ -177,19 +178,19 @@
                 <nav aria-label="Page navigation">
                   <ul class="pagination">
                     <li class="page-item">
-                      <a class="page-link" @click="loadTable(paginaActual-1)" aria-label="Anterior">
+                      <a class="page-link" @click="loadTable(currentPage-1,limit)" aria-label="Anterior">
                         <span aria-hidden="true">&laquo;</span>
                       </a>
                     </li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 1 }" @click="loadTable(1)">1</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 2 }" @click="loadTable(2)">2</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 3 }" @click="loadTable(3)">3</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 4 }" @click="loadTable(4)">4</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 5 }" @click="loadTable(5)">5</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 6 }" @click="loadTable(6)">6</a></li>
-                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': paginaActual === 7 }" @click="loadTable(7)">7</a></li>
-                    <li class="page-item" :class="{ 'selected-page': paginaActual === 1 }">
-                      <a class="page-link" @click="loadTable(paginaActual+1)" aria-label="Siguiente">
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 1 }" @click="loadTable(1,limit)">1</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 2 }" @click="loadTable(2,limit)">2</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 3 }" @click="loadTable(3,limit)">3</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 4 }" @click="loadTable(4,limit)">4</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 5 }" @click="loadTable(5,limit)">5</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 6 }" @click="loadTable(6,limit)">6</a></li>
+                    <li class="page-item" ><a class="page-link" :class="{ 'selected-page': currentPage === 7 }" @click="loadTable(7,limit)">7</a></li>
+                    <li class="page-item" :class="{ 'selected-page': currentPage === 1 }">
+                      <a class="page-link" @click="loadTable(currentPage+1,limit)" aria-label="Siguiente">
                         <span aria-hidden="true">&raquo;</span>
                       </a>
                     </li>
@@ -198,13 +199,13 @@
               </div>
               <div class="col-md-6 text-right">
                 <!-- Texto "Mostrando X a Y de Z registros" y select -->
-                Mostrando {{ paginaActual }} a 8 de {{ totalRegistros }} registros
+                Mostrando {{ startIndex }} a {{ endIndex }} de {{ totalRegistros }} registros
                 <label for="recordsPerPage" class="mr-2"> </label>
-                <select id="recordsPerPage" class="p-2">
-                  <option>Mostrar 8</option>
-                  <option>Mostrar 25</option>
-                  <option>Mostrar 50</option>
-                  <option>Mostrar 100</option>
+                <select id="recordsPerPage" class="p-2" v-model="limit" @change="loadTable(currentPage,limit)">
+                  <option value="8">Mostrar 8</option>
+                  <option value="16">Mostrar 16</option>
+                  <option value="24">Mostrar 24</option>
+                  <option value="32">Mostrar 32</option>
                 </select>
               </div>
             </div>
@@ -214,86 +215,94 @@
     </div>
   </div>
 </template>
-  <script lang="ts">
-  /* global $ */
-  import {defineComponent} from 'vue';
-  import $ from 'jquery';
-  import 'datatables.net';
-  import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-  import '@fortawesome/fontawesome-free/css/all.css';
-  import 'bootstrap/dist/css/bootstrap.css'; 
-  import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-  import './empleados.css'
-  import { apiUrl } from '@/config';
+<script lang="ts">
+import { defineComponent, ref, onMounted , computed} from 'vue';
+import { useRouter } from 'vue-router';
+import $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import '@fortawesome/fontawesome-free/css/all.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import './empleados.css';
+import { apiUrl } from '@/config';
 
-    export default defineComponent({
-        name: 'EmpleadosL',
-        data() {
-          return {
-            isLoading : false,
-            empleados: [] as any[], 
-            paginaActual: 1,
-            totalRegistros: 0,
-            totalPaginas: 0,
-          }
-        },
-        methods:{
-          salir(){
-            localStorage.removeItem('token');
-            this.$router.push('/');
-          },
-          async loadTable(page: number){
-            if(page < 1){
-              return
-            }
-            this.isLoading = true;
-            this.paginaActual = page;
-            const token = localStorage.getItem('token');
-            if (!token) {
-              console.error('No se encontró el token en localStorage');
-              return;
-            }
-            console.log(token)
-            const headers = new Headers();
-            const dataTable = $('#empleados-table').DataTable({
-              paging: true,
-              lengthChange: false,
-              searching: false,
-            });
-            $('#empleados-table').on('page.dt', () => {
-              const pageInfo = dataTable.page.info();
-              const currentPage = pageInfo.page + 1; 
-              const totalShowing = pageInfo.end - pageInfo.start + 1;
-              this.paginaActual = currentPage;
-              this.totalPaginas = totalShowing;
-              console.log('Número actual de página:', currentPage);
-              console.log('Total mostrando:', totalShowing);
-            });
-            headers.append('Authorization', `Bearer ${token}`);
-            const apiEndpoint = `${apiUrl}/empleados?limit=8&page=${page}`; 
-            fetch(apiEndpoint, {
-              method: 'GET', 
-              headers: headers,
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                this.empleados = data.data;
-                this.totalRegistros = data.total
-                this.isLoading = false; 
-                // this.$nextTick(() => {
-                //   $('#empleados-table').DataTable();
-                // });
-              })
-              .catch((error) => {
-                console.error('Error al obtener los datos de la API:', error);
-              });
-          }
-        },
-        mounted() {
-          this.loadTable(1);
-        }, 
+
+export default defineComponent({
+  name: 'EmpleadosL',
+  setup() {
+    const router = useRouter();
+    const isLoading = ref(false);
+    const employers = ref<any[]>([]);
+    const currentPage = ref(1);
+    const limit = ref(8);
+    const totalRegistros = ref(0);
+    const totalPaginas = ref(0);
+    const username = ref('');
+    const siglas = ref('');
+    const startIndex = computed(() => ((currentPage.value - 1) * limit.value) + 1);
+    const endIndex = computed(() => Math.min(currentPage.value * limit.value, totalRegistros.value));
+
+    const salir = () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('usuario');
+      router.push('/');
+    };
+
+    const loadTable = async (page: number, limit: number) => {
+      if (page < 1) {
+        return;
+      }
+      isLoading.value = true;
+      currentPage.value = page;
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No se encontró el token en localStorage');
+        return;
+      }
+
+      const headers = new Headers();
+      headers.append('Authorization', `Bearer ${token}`);
+      const apiEndpoint = `${apiUrl}/empleados?limit=${limit}&page=${page}`;
+
+      try {
+        const response = await fetch(apiEndpoint, {
+          method: 'GET',
+          headers: headers,
+        });
+        const data = await response.json();
+        employers.value = data.data;
+        totalRegistros.value = data.total;
+        isLoading.value = false;
+      } catch (error) {
+        console.error('Error al obtener los datos de la API:', error);
+      }
+    };
+
+    onMounted(() => {
+      loadTable(1,8); //initial page 1
+      //get user name from local storage and set initials letters
+      username.value = localStorage.getItem('usuario') || '';
+      siglas.value = username.value.split(' ').map((n) => n[0]).join('').toUpperCase();
     });
-  </script>
+
+    return {
+      isLoading,
+      employers,
+      currentPage,
+      limit,
+      startIndex,
+      endIndex,
+      totalRegistros,
+      totalPaginas,
+      username,
+      siglas,
+      salir,
+      loadTable,
+    };
+  },
+});
+</script>
 
 
   
