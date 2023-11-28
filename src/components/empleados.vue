@@ -224,6 +224,7 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import axios from 'axios';
 import './empleados.css';
 import { apiUrl } from '@/config';
 
@@ -231,13 +232,14 @@ import { apiUrl } from '@/config';
 export default defineComponent({
   name: 'EmpleadosL',
   setup() {
+    
     const router = useRouter();
     const isLoading = ref(false);
     const employers = ref<any[]>([]);
     const currentPage = ref(1);
     const limit = ref(8);
     const totalRegistros = ref(0);
-    const totalPaginas = ref(0);
+    
     const username = ref('');
     const siglas = ref('');
     const startIndex = computed(() => ((currentPage.value - 1) * limit.value) + 1);
@@ -249,8 +251,8 @@ export default defineComponent({
       router.push('/');
     };
 
-    const loadTable = async (page: number, limit: number) => {
-      if (page < 1) {
+    const loadTable = async (page: number, limitC: number) => {
+      if (page < 1  ) {
         return;
       }
       isLoading.value = true;
@@ -263,7 +265,7 @@ export default defineComponent({
 
       const headers = new Headers();
       headers.append('Authorization', `Bearer ${token}`);
-      const apiEndpoint = `${apiUrl}/empleados?limit=${limit}&page=${page}`;
+      const apiEndpoint = `${apiUrl}/empleados?limit=${limitC}&page=${page}`;
 
       try {
         const response = await fetch(apiEndpoint, {
@@ -280,7 +282,9 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      loadTable(1,8); //initial page 1
+      // Initialize Load
+      loadTable(currentPage.value,limit.value); 
+
       //get user name from local storage and set initials letters
       username.value = localStorage.getItem('usuario') || '';
       siglas.value = username.value.split(' ').map((n) => n[0]).join('').toUpperCase();
@@ -294,7 +298,6 @@ export default defineComponent({
       startIndex,
       endIndex,
       totalRegistros,
-      totalPaginas,
       username,
       siglas,
       salir,
