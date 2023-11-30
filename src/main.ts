@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import { createRouter, createWebHistory } from 'vue-router'; // Asegúrate de importar createRouter y createWebHistory
+import { createRouter, createWebHistory } from 'vue-router'; 
 import Login from './components/login.vue';
 import Empleados from './components/empleados.vue';
 import 'jquery';
