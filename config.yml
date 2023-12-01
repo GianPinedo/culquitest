@@ -1,7 +1,7 @@
 # Configuración principal de Jekyll
 title: Mi Sitio Jekyll
 description: Un sitio web creado con Jekyll
-baseurl: baseurl: /GianPinedo/culquitest/ # Si tu sitio se encuentra en una subcarpeta, ajústalo aquí
+baseurl: baseurl: /culquitest/ # Si tu sitio se encuentra en una subcarpeta, ajústalo aquí
 theme: jekyll-theme-primer # Elige un tema de Jekyll
 
 # Configuración de construcción

@@ -1,4 +1,4 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/GianPinedo/culquitest/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/culquitest/' : '/',
   transpileDependencies: ['vue'],
 }
