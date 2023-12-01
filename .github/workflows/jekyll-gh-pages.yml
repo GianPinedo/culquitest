@@ -1,42 +1,50 @@
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+name: Deploy static content to Pages
 
 on:
+  # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]  # Este flujo de trabajo se ejecutará cuando se hagan cambios en la rama "main"
-  workflow_dispatch:  # Esto permite ejecutar manualmente el flujo de trabajo desde la pestaña de Acciones en GitHub
+    branches: ['master']
 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Allow one concurrent deployment
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: 'pages'
+  cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest  # Se ejecutará en una máquina virtual Ubuntu
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3  # Este paso descarga tu repositorio
-      - name: Setup Pages
-        uses: actions/configure-pages@v3  # Configura las páginas de GitHub
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1  # Construye tu sitio Jekyll
-        with:
-          source: /culquitest/  # La fuente de tus archivos Jekyll (ajústala según tu estructura)
-          destination: ./_site  # La carpeta de destino donde se almacenarán los archivos generados
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2  # Carga los archivos generados como un artefacto
-
+  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          # Upload dist repository
+          path: './dist'
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2  # Despliega los archivos en GitHub Pages
+        uses: actions/deploy-pages@v2
