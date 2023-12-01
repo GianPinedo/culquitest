@@ -12,7 +12,6 @@ import Empleados from './components/empleados.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import { apiUrl } from '@/config';
 
-
 const router = createRouter({
   history: createWebHistory(),
   routes: [
