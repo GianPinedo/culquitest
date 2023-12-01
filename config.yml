@@ -1,0 +1,17 @@
+# Configuración principal de Jekyll
+title: Mi Sitio Jekyll
+description: Un sitio web creado con Jekyll
+baseurl: / # Si tu sitio se encuentra en una subcarpeta, ajústalo aquí
+theme: jekyll-theme-primer # Elige un tema de Jekyll
+
+# Configuración de construcción
+markdown: kramdown # Elige el motor de Markdown
+plugins:
+  - jekyll-feed # Agrega un feed RSS al sitio
+
+# Configuración adicional
+author: Tu Nombre
+
+# Configuración de ruta de origen y destino
+source: . # Ruta de origen, aquí se asume que los archivos fuente están en la raíz del proyecto
+destination: ./_site # Ruta de destino, aquí se generará el sitio

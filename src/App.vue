@@ -10,7 +10,6 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import Login from './components/login.vue';
 import Empleados from './components/empleados.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import { apiUrl } from '@/config';
 
 const router = createRouter({
   history: createWebHistory(),

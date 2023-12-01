@@ -262,11 +262,9 @@ export default defineComponent({
         console.error('No se encontró el token en localStorage');
         return;
       }
-
       const headers = new Headers();
       headers.append('Authorization', `Bearer ${token}`);
       const apiEndpoint = `${apiUrl}/empleados?limit=${limitC}&page=${page}`;
-
       try {
         const response = await fetch(apiEndpoint, {
           method: 'GET',
